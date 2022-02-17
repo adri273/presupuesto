@@ -8,6 +8,8 @@ import Button from "@mui/material/Button";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker from "@mui/lab/DatePicker";
+import InputMask from "react-input-mask";
+
 
 function Form({ params }) {
   const { id } = params;
@@ -40,7 +42,6 @@ function Form({ params }) {
                 variant="outlined"
                 type="number"
                 InputProps={{ inputProps: { min: 1, max: 20 } }}
-                prefix="€"
                 fullWidth
                 required
               />
@@ -54,7 +55,9 @@ function Form({ params }) {
                 name="loan_date"
                 value={selectedDate}
                 onChange={(date) => handleDateChange(date)}
-                renderInput={(params) => <TextField {...params} variant="outlined" fullWidth />}
+                renderInput={(params) => (
+                  <TextField {...params} variant="outlined" fullWidth />
+                )}
                 required
               />
             </Grid>
@@ -94,14 +97,16 @@ function Form({ params }) {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                name="phone"
+              <InputMask
+                mask="(+34) 999 99 99 99"
+                maskChar=" "
                 label="Teléfono"
-                variant="outlined"
-                type="text" //TODO: VALIDATE PHONE FORMAT
-                fullWidth
+                name="phone"
                 required
-              />
+                fullWidth
+              >
+                {(params) => <TextField {...params} />}
+              </InputMask>
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -109,16 +114,29 @@ function Form({ params }) {
                 label="Edad"
                 variant="outlined"
                 type="number"
+                InputProps={{ inputProps: { min: 16, max: 120 } }}
                 fullWidth
                 required
               />
             </Grid>
             <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                name="check"
-                label="Aceptar térnimos y condiciones." //TODO: ADD LINK: https://cloudframework.io/terminos-y-condiciones/
-              />
+              <div>
+                <FormControlLabel
+                  control={
+                    <Checkbox value="allowExtraEmails" color="primary" />
+                  }
+                  name="check"
+                  label="He leído y acepto los " //TODO: VALIDAR + ADD LINK: https://cloudframework.io/terminos-y-condiciones/
+                  required
+                />
+                <a
+                  className="form__terms"
+                  href="https://cloudframework.io/terminos-y-condiciones/"
+                  target="_blank" rel="noreferrer"
+                >
+                  términos y condiciones.
+                </a>
+              </div>
             </Grid>
           </Grid>
           <Button

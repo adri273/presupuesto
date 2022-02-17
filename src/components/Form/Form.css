@@ -8,4 +8,17 @@
 }
 .form__submit {
     margin: 1rem 0 !important;
+    color: white !important;
+    font-weight: bold !important;
+}
+
+.form__terms {
+    text-decoration: none;
+    color: #26E2EC;
+    position: relative;
+    left: -10px;
+    top: 1px;
+}
+.form__terms:hover {
+    color: rgb(26, 158, 165);
 }
