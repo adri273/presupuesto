@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import "./Form.css";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
-import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DatePicker from "@mui/lab/DatePicker";
 
 function Form({ params }) {
   const { id } = params;
@@ -19,7 +17,7 @@ function Form({ params }) {
   const [selectedDate, handleDateChange] = useState(tomorrow);
 
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
       <div className="paper">
         <form className="form">
           <h3>Información del préstamo</h3>
@@ -48,15 +46,15 @@ function Form({ params }) {
               />
             </Grid>
             <Grid item xs={12}>
-              <KeyboardDatePicker
-                name="loan_date"
-                label="Fecha a conseguir el préstamo"
-                inputVariant="outlined"
-                format="Y-MM-dd"
+              <DatePicker
+                inputFormat="Y-MM-dd"
+                mask="____-__-__"
                 minDate={tomorrow}
+                label="Fecha a conseguir el préstamo"
+                name="loan_date"
                 value={selectedDate}
                 onChange={(date) => handleDateChange(date)}
-                fullWidth
+                renderInput={(params) => <TextField {...params} variant="outlined" fullWidth />}
                 required
               />
             </Grid>
@@ -134,7 +132,7 @@ function Form({ params }) {
           </Button>
         </form>
       </div>
-    </MuiPickersUtilsProvider>
+    </LocalizationProvider>
   );
 }
 

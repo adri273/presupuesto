@@ -2,8 +2,8 @@ import React from 'react';
 import './App.css';
 import Header from './components/Header/Header'
 import Form from './components/Form/Form'
-import Container from '@material-ui/core/Container';
-import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
+import Container from '@mui/material/Container';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 
 import {Route, Switch} from 'wouter';
@@ -18,7 +18,7 @@ const theme = createTheme({
 
 function App() {
   return (
-    <MuiThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
     <div className='App'>
       <Container>
       <Header />
@@ -30,7 +30,7 @@ function App() {
       </Switch>
       </Container>
     </div>
-    </MuiThemeProvider>
+    </ThemeProvider>
   );
 }
 
