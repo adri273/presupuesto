@@ -1,0 +1,8 @@
+.header {
+    padding-top: 5rem;
+}
+.header__logo {
+    display: block;
+    margin: auto;
+    width: 200px;
+}

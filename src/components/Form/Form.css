@@ -1,0 +1,11 @@
+.form {
+    margin-top: 5rem;
+    max-width: 500px;
+    margin: auto;
+}
+.form h3{
+    margin: 2rem 0 1rem 0;
+}
+.form__submit {
+    margin: 1rem 0 !important;
+}
