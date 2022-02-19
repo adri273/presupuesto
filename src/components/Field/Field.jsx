@@ -1,13 +1,16 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import './Field.css';
 import { TextField, Grid, FormControlLabel } from "@mui/material";
 import DatePicker from "@mui/lab/DatePicker";
 import {Controller} from "react-hook-form";
 import MuiPhoneNumber from "material-ui-phone-number";
-
+import InputMask from "react-input-mask";
+import { format } from "date-fns";
+import {dateFormat} from "../../data/FormData"
 
 function Field(params) {
-  const {props, register, errors, control} = params;
+  const {props, form} = params;
+  const {register, errors, control, setValue} = form;
   const { field, fieldProps, validation, xs, sm, subField, linkTerms } = props;
   const name = fieldProps.name;
 
@@ -16,6 +19,7 @@ function Field(params) {
     DatePicker,
     MuiPhoneNumber,
     FormControlLabel,
+    InputMask,
   };
   const Field = components[field || "TextField"];
   const SubField = components[subField];
@@ -24,6 +28,12 @@ function Field(params) {
     error: !!errors[name],
     helperText: errors[name]?.message
   }; 
+
+  const onChangeDate = subField === "DatePicker" ? (date) =>
+              date instanceof Date
+                ? setValue(name, format(date, dateFormat))
+                : setValue(name, date)
+                : null;
 
   return (
     <Grid item xs={xs} sm={sm}>
@@ -36,7 +46,9 @@ function Field(params) {
               <SubField
                 {...fieldProps}
                 value={value}
-                onChange={fieldProps.onChange || onChange}
+                onChange={
+                  fieldProps.onChange || onChangeDate || onChange
+                }
                 ref-setter={register(name, validation)}
                 {...errorProps}
               />
