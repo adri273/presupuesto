@@ -1,31 +1,52 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import './Field.css';
 import {
   TextField,
   Grid,
 } from "@mui/material";
+import DatePicker from "@mui/lab/DatePicker";
 
 
 function Field(params) {
-  const {props, register, errors} = params;
-  const {field, name, label, type, validation, xs, sm} = props;
+  const {props, register, errors, onChange} = params;
+  const {field, fieldProps, validation, xs, sm} = props;
+  const name = fieldProps.name;
 
   const components = {
-    TextField
-  }
+    TextField,
+    DatePicker,
+  };
   const Field = components[field || "TextField"];
+
+  //const [selectedDate, handleDateChange] = useState(fieldProps.minDate);
+
 
   return (
     <Grid item xs={xs} sm={sm}>
-      <Field
-        name={name}
-        label={label}
-        type={type}
-        {...register(name, validation)}
-        error={!!errors[name]}
-        helperText={errors[name]?.message}
-        fullWidth
-      />
+      {field === "DatePicker" ? (
+        <Field
+          {...fieldProps}
+          name={name}              
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              {...register(name, validation)}
+              error={!!errors[name]}
+              helperText={errors[name]?.message}
+              fullWidth
+            />
+          )}
+          fullWidth
+        />
+      ) : (
+        <Field
+          {...fieldProps}
+          {...register(name, validation)}
+          error={!!errors[name]}
+          helperText={errors[name]?.message}
+          fullWidth
+        />
+      )}
     </Grid>
   );
 }

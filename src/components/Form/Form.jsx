@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Form.css";
 import { TextField, FormControlLabel, FormControl, Checkbox, Grid, Button } from "@mui/material";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import { format } from 'date-fns';
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker from "@mui/lab/DatePicker";
 import InputMask from "react-input-mask";
@@ -13,149 +14,218 @@ import Field from "../Field/Field"
 function Form({ params }) {
   const { id } = params;
   console.log(id);
+
+  const dateFormat = 'Y-MM-dd';
+  
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   const [selectedDate, handleDateChange] = useState(tomorrow);
+
+
+  useEffect(() => {
+    setValue("loan_date",format(selectedDate, dateFormat));
+    
+  }, [selectedDate])
+  
 
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+    setValue  
+    } = useForm();
 
   const onSubmit = (data) => {
     console.log(data);
   }
 
-  const inputs = [
+  const formData = [
     {
-      name: "loan_amount",
-      label: "Importe del préstamo (€)",
-      type: "number",
-      field: "TextField",
-      validation: {
-        required: {
-          value: true,
-          message: "¿Que cantidad necesitas?",
+      title: "Información del préstamo",
+      inputs: [
+        {
+          fieldProps: {
+            name: "loan_amount",
+            label: "Importe del préstamo (€)",
+            type: "number",
+          },
+          field: "TextField",
+          validation: {
+            required: {
+              value: true,
+              message: "¿Que cantidad necesitas?",
+            },
+            min: {
+              value: 11,
+              message: "Cantidad mínima: 11",
+            },
+            max: {
+              value: 1000,
+              message: "Cantidad máxima: 1000",
+            },
+          },
+          xs: 12,
+          sm: 6,
         },
-        min: {
-          value: 11,
-          message: "Cantidad mínima: 11",
+        {
+          fieldProps: {
+            name: "loan_week",
+            label: "Tiempo a devoler (años)",
+            type: "number",
+          },
+          field: "TextField",
+          validation: {
+            required: {
+              value: true,
+              message: "¿En cuantos años quieres devolver el préstamo?",
+            },
+            min: {
+              value: 1,
+              message: "Mínimo 1 año",
+            },
+            max: {
+              value: 20,
+              message: "Máximo 20 años",
+            },
+          },
+          xs: 12,
+          sm: 6,
         },
-        max: {
-          value: 1000,
-          message: "Cantidad máxima: 1000",
+        {
+          fieldProps: {
+            name: "loan_date",
+            label: "Fecha a conseguir el préstamo",
+            inputFormat: dateFormat,
+            mask: "____-__-__",
+            minDate: tomorrow,
+            value: selectedDate,
+            onChange: (date) => handleDateChange(date),
+          },
+          field: "DatePicker",
+          validation: {
+            required: {
+              value: true,
+              message: "Obligatorio",
+            }
+          },
+          xs: 12,
+          sm: 12,
         },
-      },
-      xs: 12,
-      sm: 6
-    }
+      ]
+    },
+    {
+      title: "Información personal",
+      inputs: [
+        {
+          fieldProps: {
+            name: "name",
+            label: "Nombre",
+            disabled: true,
+            value:"Adri"
+          },
+          field: "TextField",
+          validation: {
+            required: {
+              value: true,
+              message: "Introduce tu nombre",
+            },
+          },
+          xs: 12,
+          sm: 6,
+        },
+        {
+          fieldProps: {
+            name: "surname",
+            label: "Apellidos",
+            disabled: true,
+            value:"Avellaneda"
+          },
+          field: "TextField",
+          validation: {
+            required: {
+              value: true,
+              message: "Introduce tus apellidos",
+            },
+          },
+          xs: 12,
+          sm: 6,
+        },
+        {
+          fieldProps: {
+            name: "email",
+            label: "Email",
+            disabled: true,
+            value:"adriavellanedamartinez@gmail.com",
+            type: "email"
+          },
+          field: "TextField",
+          validation: {
+            required: {
+              value: true,
+              message: "Introduce tu email",
+            },
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+              message: "El email no es válido"
+            }
+          },
+          xs: 12,
+          sm: 12,
+        },
+        /*{
+          fieldProps: {
+            name: "email",
+            label: "Email",
+            disabled: true,
+            value:"adriavellanedamartinez@gmail.com",
+            type: "email"
+          },
+          field: "MuiPhoneNumber",
+          validation: {
+            required: {
+              value: true,
+              message: "Introduce tu email",
+            },
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+              message: "El email no es válido"
+            }
+          },
+          xs: 12,
+          sm: 6,
+        },
+        <InputMask
+                mask="(+34) 999 999 999"
+                maskChar=" "
+                label="Teléfono"
+                name="phone"
+                value={values.phone}
+                error={errors.phone}
+                required
+                fullWidth
+              >
+                {(params) => <TextField {...params} />}
+              </InputMask>*/
+        
+      ]
+    },
   ];
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <div className="paper">
         <form className="form" onSubmit={handleSubmit(onSubmit)}>
-          <h3>Información del préstamo</h3>
-          <Grid container spacing={2}>
-            {inputs.map((input, i) => <Field key={i} props={{...input}} register={register} errors={errors} /> ) }
-            {/*<Grid item xs={12} sm={6}>
-              <TextField
-                name="loan_amount"
-                label="Importe del préstamo (€)"
-                variant="outlined"
-                type="number"
-                {...register("loan_amount", {
-                  required: {
-                    value: true,
-                    message: "¿Que cantidad necesitas?",
-                  },
-                  min: {
-                    value: 11,
-                    message: "Cantidad mínima: 11",
-                  },
-                  max: {
-                    value: 1000,
-                    message: "Cantidad máxima: 1000",
-                  },
-                })}
-                error={errors?.loan_amount}
-                helperText={errors?.loan_amount?.message}
-                fullWidth
-              />
-              </Grid>*/}
-            {/*<Grid item xs={12} sm={6}>
-              <TextField
-              name="loan_week"
-                label="Tiempo a devoler (años)"
-                variant="outlined"
-                type="number"
-                {...register("loan_week", { required: true, min: 1, max: 20 })}
-                fullWidth
-              />
+          {formData.map(({title, inputs}, i) => 
+          <div key={i}>
+            <h3>{title}</h3>
+            <Grid container spacing={2}>
+              {inputs.map((input, idx) => <Field key={idx} props={{...input}} register={register} errors={errors} /> ) }
             </Grid>
-            <Grid item xs={12}>
-              <DatePicker
-                inputFormat="Y-MM-dd"
-                mask="____-__-__"
-                minDate={tomorrow}
-                label="Fecha a conseguir el préstamo"
-                name="loan_date"
-                value={selectedDate}
-                onChange={(date) => handleDateChange(date)}
-                renderInput={(params) => (
-                  <TextField {...params} variant="outlined" fullWidth />
-                )}
-                required
-              />
-                </Grid>*/}
-          </Grid>
+          </div>
+          ) }
+          
 
-          {/*<h3>Información personal</h3>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                name="name"
-                label="Nombre"
-                variant="outlined"
-                value={values.name}
-                error={errors.name}
-                fullWidth
-                required
-                disabled
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                name="surname"
-                label="Apellidos"
-                variant="outlined"
-                value={values.surname}
-                error={errors.surname}
-                fullWidth
-                required
-                disabled
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Email"
-                variant="outlined"
-                type="email"
-                {...register("email", {
-                    required: {
-                      value: true,
-                      message: "Necesitas este campo"
-                    },
-                    pattern: {
-                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                      message: "El formato no es correcto"
-                    }
-                  })}
-                fullWidth
-                disabled
-              />
-            </Grid>
+          {/*
             <Grid item xs={12} sm={6}>
               <InputMask
                 mask="(+34) 999 99 99 99"
