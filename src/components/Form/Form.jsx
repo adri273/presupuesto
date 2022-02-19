@@ -22,18 +22,29 @@ function Form({ params }) {
   const [selectedDate, handleDateChange] = useState(tomorrow);
 
 
-  useEffect(() => {
-    setValue("loan_date",format(selectedDate, dateFormat));
-    
-  }, [selectedDate])
+
   
 
   const {
     register,
     formState: { errors },
     handleSubmit,
-    setValue  
-    } = useForm();
+    setValue,
+    getValues,
+    control,
+  } = useForm({
+    mode: "onChange",
+    defaultValues: {
+      name: "Adri",
+      surname: "Avellaneda",
+      email: "adriavellanedamartinez@gmail.com",
+      phone: "34696524301",
+      age: 21,
+      loan_date: format(tomorrow, dateFormat),
+      check: false
+    },
+  });
+
 
   const onSubmit = (data) => {
     console.log(data);
@@ -96,22 +107,32 @@ function Form({ params }) {
             name: "loan_date",
             label: "Fecha a conseguir el préstamo",
             inputFormat: dateFormat,
+            dateFormat: dateFormat,
             mask: "____-__-__",
             minDate: tomorrow,
-            value: selectedDate,
-            onChange: (date) => handleDateChange(date),
+            onChange: (date) =>
+              date instanceof Date
+                ? setValue("loan_date", format(date, dateFormat))
+                : setValue("loan_date", date),
+            inputProps: {onKeyDown: (e) => e.preventDefault()},
+            renderInput: (params) => <TextField {...params} fullWidth />,
           },
-          field: "DatePicker",
+          field: "Controller",
+          subField: "DatePicker",
           validation: {
             required: {
               value: true,
-              message: "Obligatorio",
-            }
+              message: "¿Cuándo quieres recibir el préstamo?",
+            },
+            minLength: {
+              value: 5,
+              message: "Fecha incorrecta",
+            },
           },
           xs: 12,
           sm: 12,
         },
-      ]
+      ],
     },
     {
       title: "Información personal",
@@ -120,8 +141,7 @@ function Form({ params }) {
           fieldProps: {
             name: "name",
             label: "Nombre",
-            disabled: true,
-            value:"Adri"
+            readOnly: true,
           },
           field: "TextField",
           validation: {
@@ -137,8 +157,7 @@ function Form({ params }) {
           fieldProps: {
             name: "surname",
             label: "Apellidos",
-            disabled: true,
-            value:"Avellaneda"
+            readOnly: true,
           },
           field: "TextField",
           validation: {
@@ -154,9 +173,8 @@ function Form({ params }) {
           fieldProps: {
             name: "email",
             label: "Email",
-            disabled: true,
-            value:"adriavellanedamartinez@gmail.com",
-            type: "email"
+            readOnly: true,
+            type: "email",
           },
           field: "TextField",
           validation: {
@@ -166,48 +184,80 @@ function Form({ params }) {
             },
             pattern: {
               value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-              message: "El email no es válido"
-            }
+              message: "El email no es válido",
+            },
           },
           xs: 12,
           sm: 12,
         },
-        /*{
+        {
           fieldProps: {
-            name: "email",
-            label: "Email",
-            disabled: true,
-            value:"adriavellanedamartinez@gmail.com",
-            type: "email"
+            name: "phone",
+            label: "Teléfono",
+            defaultCountry: "es",
+            variant: "outlined",
           },
-          field: "MuiPhoneNumber",
+          field: "Controller",
+          subField: "MuiPhoneNumber",
           validation: {
             required: {
               value: true,
-              message: "Introduce tu email",
+              message: "Introduce tu número de teléfono",
             },
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-              message: "El email no es válido"
-            }
+            minLength: {
+              value: 11,
+              message: "El número de teléfono no es válido",
+            },
           },
           xs: 12,
           sm: 6,
         },
-        <InputMask
-                mask="(+34) 999 999 999"
-                maskChar=" "
-                label="Teléfono"
-                name="phone"
-                value={values.phone}
-                error={errors.phone}
-                required
-                fullWidth
-              >
-                {(params) => <TextField {...params} />}
-              </InputMask>*/
-        
-      ]
+        {
+          fieldProps: {
+            name: "age",
+            label: "Edad",
+            type: "number",
+          },
+          field: "TextField",
+          validation: {
+            required: {
+              value: true,
+              message: "¿Cuántos años tienes?",
+            },
+            min: {
+              value: 18,
+              message: "Tienes que ser mayor de edad",
+            },
+            max: {
+              value: 120,
+              message: "¿Enserio?",
+            },
+          },
+          xs: 12,
+          sm: 6,
+        },
+        {
+          fieldProps: {
+            name: "check",
+            label: "He leído y acepto los ",
+            control: <Checkbox color="primary" required />,
+          },
+          linkTerms: (
+            <a
+              className="form__terms"
+              href="https://cloudframework.io/terminos-y-condiciones/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              términos y condiciones.
+            </a>
+          ),
+          field: "Controller",
+          subField: "FormControlLabel",
+          xs: 12,
+          sm: 12,
+        },
+      ],
     },
   ];
 
@@ -219,58 +269,10 @@ function Form({ params }) {
           <div key={i}>
             <h3>{title}</h3>
             <Grid container spacing={2}>
-              {inputs.map((input, idx) => <Field key={idx} props={{...input}} register={register} errors={errors} /> ) }
+              {inputs.map((input, idx) => <Field key={idx} props={{...input}} register={register} errors={errors} control={control} /> ) }
             </Grid>
           </div>
           ) }
-          
-
-          {/*
-            <Grid item xs={12} sm={6}>
-              <InputMask
-                mask="(+34) 999 99 99 99"
-                maskChar=" "
-                label="Teléfono"
-                name="phone"
-                value={values.phone}
-                error={errors.phone}
-                required
-                fullWidth
-              >
-                {(params) => <TextField {...params} />}
-              </InputMask>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                name="age"
-                label="Edad"
-                variant="outlined"
-                type="number"
-                InputProps={{ inputProps: { min: 16, max: 120 } }}
-                fullWidth
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <div>
-                <FormControlLabel
-                  control={<Checkbox color="primary" required />}
-                  name="check"
-                  value={values.check}
-                  error={errors.check}
-                  label="He leído y acepto los " //TODO: VALIDAR + ADD LINK: https://cloudframework.io/terminos-y-condiciones/
-                />
-                <a
-                  className="form__terms"
-                  href="https://cloudframework.io/terminos-y-condiciones/"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  términos y condiciones.
-                </a>
-              </div>
-            </Grid>
-          </Grid>*/}
           <Button
             type="submit"
             fullWidth
