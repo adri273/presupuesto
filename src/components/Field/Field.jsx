@@ -11,7 +11,7 @@ import {dateFormat} from "../../data/FormData"
 function Field(params) {
   const {props, form} = params;
   const {register, errors, control, setValue} = form;
-  const { field, fieldProps, validation, xs, sm, subField, linkTerms } = props;
+  const { field, fieldProps, validation, xs, sm, md, subField, linkTerms } = props;
   const name = fieldProps.name;
 
   //Valid components to display
@@ -40,7 +40,7 @@ function Field(params) {
                 : null;
 
   return (
-    <Grid item xs={xs} sm={sm}>
+    <Grid item xs={xs} sm={sm} md={md}>
       {field === "Controller" ? (
         <Controller
           name={name}

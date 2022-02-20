@@ -7,3 +7,13 @@
     margin: auto;
     width: 200px;
 }
+
+@media (max-width: 1024px) {
+    .header {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+    .header__logo {
+        width: 180px;
+    }
+}

@@ -9,8 +9,7 @@ tomorrow.setDate(tomorrow.getDate() + 1);
 
 export const defaultData = {
     loan_date: format(tomorrow, dateFormat),
-    check: false,
-  }
+}
 
   //Array of inputs, to render dinamically on the form using Field.jsx component
 export const formData = [
@@ -39,11 +38,12 @@ export const formData = [
             },
           },
           xs: 12,
-          sm: 6,
+          sm: 12,
+          md: 6,
         },
         {
           fieldProps: {
-            name: "loan_week",
+            name: "loan_weeks",
             label: "Tiempo a devoler (años)",
             type: "number",
           },
@@ -63,7 +63,8 @@ export const formData = [
             },
           },
           xs: 12,
-          sm: 6,
+          sm: 12,
+          md: 6,
         },
         {
           fieldProps: {
@@ -90,6 +91,7 @@ export const formData = [
           },
           xs: 12,
           sm: 12,
+          md: 12,
         },
       ],
     },
@@ -113,7 +115,8 @@ export const formData = [
             },
           },
           xs: 12,
-          sm: 6,
+          sm: 12,
+          md: 6,
         },
         {
           fieldProps: {
@@ -132,7 +135,8 @@ export const formData = [
             },
           },
           xs: 12,
-          sm: 6,
+          sm: 12,
+          md: 6,
         },
         {
           fieldProps: {
@@ -157,6 +161,7 @@ export const formData = [
           },
           xs: 12,
           sm: 12,
+          md: 12,
         },
         {
           fieldProps: {
@@ -189,7 +194,8 @@ export const formData = [
             },
           },
           xs: 12,
-          sm: 6,
+          sm: 12,
+          md: 6,
         },
         /* Input preparado para cuando se pueda diferenciar el código de país
           {
@@ -215,7 +221,8 @@ export const formData = [
             },
           },
           xs: 12,
-          sm: 6,
+          sm: 12,
+          md: 6,
         },*/
         {
           fieldProps: {
@@ -237,12 +244,13 @@ export const formData = [
               message: "Tienes que ser mayor de edad",
             },
             max: {
-              value: 120,
+              value: 140,
               message: "¿Enserio?",
             },
           },
           xs: 12,
-          sm: 6,
+          sm: 12,
+          md: 6,
         },
         {
           fieldProps: {
@@ -264,6 +272,7 @@ export const formData = [
           subField: "FormControlLabel",
           xs: 12,
           sm: 12,
+          md: 12,
         },
       ],
     },

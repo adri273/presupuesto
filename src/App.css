@@ -19,3 +19,12 @@
 .content__right{
     overflow-y: scroll;
 }
+
+@media (max-width: 600px) {
+    .content__left {
+        display: none;
+    }
+    .content__right {
+        width: 100% !important;
+    }
+}

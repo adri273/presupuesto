@@ -1,5 +1,5 @@
 *{ margin: 0; }
-body, p, span, input, label, button {
+body, p, span, input, label, button, th, td {
   margin: 0;
   font-family: 'Varela Round', sans-serif !important;
   -webkit-font-smoothing: antialiased;
