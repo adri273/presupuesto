@@ -1,0 +1,21 @@
+.app__content{
+    display: flex;
+    height: 100vh;
+}
+.app__content > div{
+    width: 50%;
+}
+.content__left{
+    background-image: url("https://helloteca.com/wp-content/uploads/2020/08/shutterstock_46371985-scaled-e1598622825206.jpg");
+    background-position: center; 
+    background-repeat:no-repeat; 
+    background-size: cover;
+}
+.content__left img {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+}
+.content__right{
+    overflow-y: scroll;
+}

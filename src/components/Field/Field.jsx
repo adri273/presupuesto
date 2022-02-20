@@ -14,6 +14,7 @@ function Field(params) {
   const { field, fieldProps, validation, xs, sm, subField, linkTerms } = props;
   const name = fieldProps.name;
 
+  //Valid components to display
   const components = {
     TextField,
     DatePicker,
@@ -24,11 +25,14 @@ function Field(params) {
   const Field = components[field || "TextField"];
   const SubField = components[subField];
 
+  //If field == check (terms of use). Disable errors props.
+  //html5 validation for this input
   const errorProps = (name === "check") ? {} : {
     error: !!errors[name],
     helperText: errors[name]?.message
   }; 
 
+  //Apply dateFormat when selected new date
   const onChangeDate = subField === "DatePicker" ? (date) =>
               date instanceof Date
                 ? setValue(name, format(date, dateFormat))

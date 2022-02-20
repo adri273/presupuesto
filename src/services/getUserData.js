@@ -4,7 +4,7 @@ export default function getUserData(id = "") {
     return fetch(apiURL+id)
     .then(res => res.json())
     .then(response => {
-        const {data = {}, status} = response;
+        const {data = {}} = response;
         return data;
     })
 }

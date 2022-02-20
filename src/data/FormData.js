@@ -1,6 +1,7 @@
 import { TextField, Checkbox, InputAdornment } from "@mui/material";
 import { format } from 'date-fns';
 
+//default dateFormat
 export const dateFormat = 'Y-MM-dd';
 
 const tomorrow = new Date();
@@ -11,6 +12,7 @@ export const defaultData = {
     check: false,
   }
 
+  //Array of inputs, to render dinamically on the form using Field.jsx component
 export const formData = [
     {
       title: "Información del préstamo",
@@ -71,10 +73,6 @@ export const formData = [
             dateFormat: dateFormat,
             mask: "____-__-__",
             minDate: tomorrow,
-            /*onChange: (date) =>
-              date instanceof Date
-                ? setValue("loan_date", format(date, dateFormat))
-                : setValue("loan_date", date),*/
             inputProps: { onKeyDown: (e) => e.preventDefault() },
             renderInput: (params) => <TextField {...params} fullWidth />,
           },
